@@ -1,9 +1,9 @@
 <template>
   <div class="beat-timeline">
-    <div class="beat-container">
-      <div v-if="$store.state.audio.loading">Loading</div>
+    <div v-if="$store.state.audio.loading">Loading</div>
+    <div v-else class="beat-container" @click="$store.state.audio.el.play()">
+      <div class="cursor" :style="{ left: `${cursorPosition}%` }"></div>
       <div
-        v-else
         v-for="(value, index) in $store.state.audio.beats"
         :key="index"
         class="beat"
@@ -18,6 +18,10 @@
 
 <script>
 export default {
+  data: () => ({
+    cursorPosition: 0,
+  }),
+
   computed: {
     beats() {
       return this.$store.state.audio.beats.filter(Boolean);
@@ -34,6 +38,15 @@ export default {
       return { width: radius, height: radius };
     },
   },
+
+  mounted() {
+    const { el } = this.$store.state.audio;
+    const updateCursorPosition = () => {
+      this.cursorPosition = (el.currentTime * 100) / el.duration;
+      requestAnimationFrame(updateCursorPosition);
+    };
+    updateCursorPosition();
+  },
 };
 </script>
 
@@ -49,6 +62,13 @@ export default {
   display: flex;
   align-items: center;
   height: 36px;
+}
+
+.cursor {
+  position: absolute;
+  background-color: #5c8a64;
+  height: 100%;
+  width: 3px;
 }
 
 .beat {
