@@ -3,13 +3,11 @@
 </template>
 
 <style>
-:root {
-  --app-bg-col: black;
-  --app-text-col: white;
-}
-
 body {
-  background-color: var(--app-bg-col);
-  color: var(--app-text-col);
+  background-color: black;
+  color: white;
+  margin: 0;
+  padding: 0;
+  font: 400 14px/21px 'Open Sans', sans-serif;
 }
 </style>
