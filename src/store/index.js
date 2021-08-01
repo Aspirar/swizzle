@@ -1,7 +1,14 @@
 import { createStore } from 'vuex';
 
 import song from '@/assets/audio/song.mp3';
+import img1 from '@/assets/img/one.jpg';
+import img2 from '@/assets/img/two.jpg';
+import img3 from '@/assets/img/three.jpg';
+import img4 from '@/assets/img/four.jpg';
+import img5 from '@/assets/img/five.jpg';
+
 import getBeats from '@/lib/audio';
+import getImgBufs from '@/lib/image';
 
 export default createStore({
   state: {
@@ -9,6 +16,12 @@ export default createStore({
       el: new Audio(),
       loading: true,
       beats: [],
+    },
+
+    img: {
+      loading: true,
+      bufs: [],
+      urls: [],
     },
   },
 
@@ -32,6 +45,15 @@ export default createStore({
     initAudioListener(state, listener) {
       state.audio.el.addEventListener('loadeddata', listener);
     },
+
+    unsetImgLoading(state) {
+      state.img.loading = false;
+    },
+
+    setImgBufs(state, bufs) {
+      state.img.bufs = bufs;
+      state.img.urls = bufs.map((buf) => buf.toDataURL());
+    },
   },
 
   actions: {
@@ -48,6 +70,12 @@ export default createStore({
       const beats = await getBeats(src);
       commit('setBeats', beats);
       commit('setAudioSrc', src);
+    },
+
+    async loadImgs({ commit }) {
+      const bufs = await getImgBufs([img1, img2, img3, img4, img5]);
+      commit('setImgBufs', bufs);
+      commit('unsetImgLoading');
     },
   },
 

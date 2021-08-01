@@ -3,6 +3,12 @@
 </template>
 
 <style>
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
   background-color: black;
   color: white;
