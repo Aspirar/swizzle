@@ -52,7 +52,10 @@ export default createStore({
 
     setImgBufs(state, bufs) {
       state.img.bufs = bufs;
-      state.img.urls = bufs.map((buf) => buf.toDataURL());
+    },
+
+    setImgUrls(state, urls) {
+      state.img.urls = urls;
     },
   },
 
@@ -73,8 +76,10 @@ export default createStore({
     },
 
     async loadImgs({ commit }) {
-      const bufs = await getImgBufs([img1, img2, img3, img4, img5]);
+      const urls = [img1, img2, img3, img4, img5];
+      const bufs = await getImgBufs(urls);
       commit('setImgBufs', bufs);
+      commit('setImgUrls', urls);
       commit('unsetImgLoading');
     },
   },
