@@ -108,17 +108,25 @@ function getRawBeats(energy, initialHistory, historyWidth) {
 function smoothBeats(beats, beatDistance) {
   let lastTrue = -99999;
   let lastBeat = 0;
+  let lastIndex = -99999;
+  let continuous = 0;
   for (let i = 0; i < beats.length; i += 1) {
     if (beats[i]) {
+      if (continuous > 5) lastTrue = lastIndex;
       const beatIntensity = beats[i];
       if (i - beatDistance < lastTrue) {
-        if (beats[i] > lastBeat) {
-          beats[lastTrue] = 0;
+        continuous += 1;
+        if (beats[i] / lastBeat > 1.1) {
+          beats[lastIndex] = 0;
           lastBeat = beatIntensity;
+          lastIndex = i;
         } else beats[i] = 0;
+      } else {
+        continuous = 0;
+        lastBeat = beatIntensity;
+        lastIndex = i;
       }
       lastTrue = i;
-      if (!lastBeat) lastBeat = beatIntensity;
     }
   }
 }
@@ -133,7 +141,7 @@ function getBeats(buf, windowWidth, historyWidth, beatDistance) {
 
 async function getBeatsFromUrl(url) {
   const buf = await decodeUrl(url);
-  return getBeats(buf, 1024, 43, 10);
+  return getBeats(buf, 1024, 43, 45);
 }
 
 export default getBeatsFromUrl;
