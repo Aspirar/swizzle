@@ -107,12 +107,18 @@ function getRawBeats(energy, initialHistory, historyWidth) {
 
 function smoothBeats(beats, beatDistance) {
   let lastTrue = -99999;
+  let lastBeat = 0;
   for (let i = 0; i < beats.length; i += 1) {
     if (beats[i]) {
+      const beatIntensity = beats[i];
       if (i - beatDistance < lastTrue) {
-        beats[i] = 0;
+        if (beats[i] > lastBeat) {
+          beats[lastTrue] = 0;
+          lastBeat = beatIntensity;
+        } else beats[i] = 0;
       }
       lastTrue = i;
+      if (!lastBeat) lastBeat = beatIntensity;
     }
   }
 }

@@ -62,7 +62,6 @@ export default {
 
 <style scoped>
 .thumb-timeline {
-  border-top: 1px solid black;
   background-color: rgba(255, 255, 255, .3);
   height: 72px;
   padding: 0 12px;
